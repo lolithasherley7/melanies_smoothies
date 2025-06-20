@@ -27,7 +27,7 @@ if ingredients_list and name_on_order:
     st.write("Selected fruits:", ingredients_list)
 
     # Join ingredients with comma + space to match expected format exactly
-    ingredients_string = ', '.join(ingredients_list)
+    ingredients_string = ','.join(ingredients_list)
 
     # Optional: show SQL statement for debugging
     my_insert_stmt = f"""
