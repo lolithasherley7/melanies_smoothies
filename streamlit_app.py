@@ -35,7 +35,7 @@ def singularize(name: str) -> str:
 
 if ingredients_list and name_on_order:
     st.write("Selected fruits:", ingredients_list)
-    ingredients_string = ' '.join(ingredients_list)
+    ingredients_string = ','.join(ingredients_list)
 
     for fruit in ingredients_list:
         # Get SEARCH_ON value for API queries
