@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-from snowflake.snowpark.context import get_active_session
 from snowflake.snowpark.functions import col, when_matched
 
 # UI Title
@@ -8,7 +7,8 @@ st.title(":cup_with_straw: Pending Smoothie Orders! :cup_with_straw:")
 st.write("Orders that need to be filled.")
 
 # Connect to Snowflake session
-session = get_active_session()
+cnx=st.connection("snowflake")
+session = cnx.session()
 
 # Query unfilled orders including ORDER_ID
 my_dataframe = (
@@ -19,7 +19,12 @@ my_dataframe = (
 )
 
 if my_dataframe:
-    
+     # Convert Snowflake Rows to list of dicts
+    data_dicts = [row.as_dict() for row in my_dataframe]
+
+    # Convert to pandas DataFrame
+    my_dataframe = pd.DataFrame(data_dicts)
+
     # Show editable data editor with the dataframe
     editable_df = st.data_editor(my_dataframe)
     # Submit button with correct emoji character (not shortcode)
@@ -37,26 +42,16 @@ if my_dataframe:
                     ) 
              st.success("Order(s) Updated!", icon="👍")
 
-        except:
-            st.write("Something went wrong.")
+        except Exception as e:
+             st.error(f"Something went wrong: {e}")
+             st.text(traceback.format_exc())
 
 else:
-    st.success("There are no pending orders righ now.", icon="👍")
+    st.success("There are no pending orders right now.", icon="👍")
 
 # Show total pending orders
-st.info(f"Total Pending Orders: {len(my_dataframe)}")
+st.info(f"Total Pending Orders: {len(my_dataframe) if isinstance(my_dataframe, pd.DataFrame) else 0}")
    
-            
-
-# # Convert Snowflake Rows to list of dicts
-# data_dicts = [row.as_dict() for row in my_dataframe]
-
-# # Convert to pandas DataFrame
-# df = pd.DataFrame(data_dicts)
-
-# # Optional: reset index starting from 1 for display only (not ORDER_ID)
-# df.index = range(1, len(df) + 1)
-
 
 
 
