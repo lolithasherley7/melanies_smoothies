@@ -40,7 +40,7 @@ if ingredients_list and name_on_order:
 
     # ✅ FIXED: Strip spaces, insert exactly what the user selected
     ingredients_clean = [f.strip() for f in ingredients_list]
-    ingredients_string = ','.join(ingredients_clean)
+    ingredients_string = ', '.join(ingredients_clean)
 
     # Display nutrition info using singularized names
     for fruit in ingredients_clean:
